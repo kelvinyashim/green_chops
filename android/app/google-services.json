@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "370100823586",
+    "project_id": "flutterchops",
+    "storage_bucket": "flutterchops.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:370100823586:android:cd407eaa8497a9d2a44c7b",
+        "android_client_info": {
+          "package_name": "com.example.green_chops"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLsTAwgt0TPsor2EFN_rmh1FzrLSj3Ow4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
