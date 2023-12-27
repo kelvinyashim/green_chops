@@ -14,28 +14,25 @@ class MainDrawer extends StatefulWidget {
 }
 
 class _MainDrawerState extends State<MainDrawer> {
-  @override
-  Widget build(BuildContext context) {
-    void signOut() async {
-      try {
-        await firebase.signOut();
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const Forms(),
-          ),
-        );
-      } catch (e) {
-        print('Error signing out: $e');
-      }
+  void signOut() async {
+    try {
+      await firebase.signOut();
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const Forms(),
+        ),
+      );
+    } catch (e) {
+      print('Error signing out: $e');
     }
+  }
 
-    
   File? selectedImg;
   void pickImage() async {
     final pickedImage = ImagePicker();
     final selected = await pickedImage.pickImage(
       source: ImageSource.camera,
-      imageQuality: 100,
+      imageQuality: 50,
     );
     if (selected == null) {
       return;
@@ -43,81 +40,97 @@ class _MainDrawerState extends State<MainDrawer> {
     setState(() {
       selectedImg = File(selected.path);
     });
-    
+  }
+  void changeImage() async {
+    final pickedImage = ImagePicker();
+    final selected = await pickedImage.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+    );
+    if (selected == null) {
+      return;
+    }
+    setState(() {
+      selectedImg = File(selected.path);
+    });
   }
 
-    final user = firebase.currentUser;
-
+  final user = firebase.currentUser;
+  @override
+  Widget build(BuildContext context) {
     return Drawer(
-        elevation: 2,
         child: FutureBuilder(
-          future: FirebaseFirestore.instance
-              .collection("user")
-              .doc(user!.uid)
-              .get(),
-          builder: (context, snapshot) {
-            final userData = snapshot.data;
-            final accountName = userData?["name"] ?? "name";
-            final accountEmail = userData?["email"] ?? "exam@gmail.com";
-            if (!snapshot.hasData) {
-              return LinearProgressIndicator();
-            }
-            return ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                UserAccountsDrawerHeader(
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(
-                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGXW9lIBYG9EzSxRtgu1liCvciqClaPQzqu5twB_hyAoxglZkmP7jDBqHo1a0xb7vryOw&usqp=CAU"))),
-                  accountName: Text(accountName),
-                  accountEmail: Text(accountEmail),
-                  currentAccountPicture: ClipOval(
-                    child: CircleAvatar(
-                      foregroundImage: FileImage(selectedImg!),
-                      backgroundImage: NetworkImage("https://louisville.edu/enrollmentmanagement/images/person-icon/image") ,
-                    ),
-                  ),
+      future:
+          FirebaseFirestore.instance.collection("user").doc(user!.uid).get(),
+      builder: (context, snapshot) {
+        final userData = snapshot.data;
+        final accountName = userData?["name"] ?? "name";
+        final accountEmail = userData?["email"] ?? "exam@gmail.com";
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (!snapshot.hasData) {
+          return const LinearProgressIndicator();
+        }
+
+        return ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            
+            UserAccountsDrawerHeader(
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer),
+              accountName: Text(accountName),
+              accountEmail: Text(accountEmail),
+              currentAccountPicture: CircleAvatar(
+                foregroundImage:
+                    selectedImg != null ? FileImage(selectedImg!) : null,
+                backgroundColor: Colors.grey,
+                child: IconButton(icon: Icon(Icons.camera), onPressed:changeImage, hoverColor: Colors.grey, highlightColor: Colors.grey,),
+              ),
+            ),
+            if(selectedImg == false)
+            ListTile(
+              leading: Icon(Icons.camera),
+              title: TextButton(
+
+                onPressed: pickImage,
+                child: Text(
+                  'Upload Image',
+                  style: TextStyle(fontSize: 16),
                 ),
-                ListTile(
-                  leading: Icon(Icons.camera),
-                  title: TextButton(
-                    onPressed: pickImage,
-                    child: Text(
-                      'Upload Image',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                ),
-                MyListTile(
-                  icon: Icons.person,
-                  title: "Profile",
-                  onTap: () {},
-                ),
-                MyListTile(
-                  icon: Icons.chat,
-                  title: "Messages",
-                  onTap: () {},
-                ),
-                MyListTile(
-                  icon: Icons.notification_important,
-                  title: "Notifications",
-                  onTap: () {},
-                ),
-                MyListTile(
-                  icon: Icons.settings,
-                  title: "Setting",
-                  onTap: () {},
-                ),
-                MyListTile(
-                  icon: Icons.logout_outlined,
-                  title: "Log out",
-                  onTap: signOut,
-                ),
-              ],
-            );
-          },
-        ));
+              ),
+            ),
+            if(selectedImg==true)
+
+            MyListTile(
+              icon: Icons.person,
+              title: "Profile",
+              onTap: () {},
+            ),
+            MyListTile(
+              icon: Icons.chat,
+              title: "Messages",
+              onTap: () {},
+            ),
+            MyListTile(
+              icon: Icons.notification_important,
+              title: "Notifications",
+              onTap: () {},
+            ),
+            MyListTile(
+              icon: Icons.settings,
+              title: "Setting",
+              onTap: () {},
+            ),
+            MyListTile(
+              icon: Icons.logout_outlined,
+              title: "Log out",
+              onTap: signOut,
+            ),
+          ],
+        );
+      },
+    ));
   }
 }

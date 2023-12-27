@@ -36,6 +36,9 @@ class _FormsState extends State<Forms> {
       if (isLogin) {
         final loggedIn = await firebase.signInWithEmailAndPassword(
             email: enteredEmail, password: enteredPsw);
+            if(loggedIn.user == null){
+              throw "Invalid Email or Password";
+            }
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) {
             return const Home();
