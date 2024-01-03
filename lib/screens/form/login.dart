@@ -36,6 +36,7 @@ class _FormsState extends State<Forms> {
       if (isLogin) {
         final loggedIn = await firebase.signInWithEmailAndPassword(
             email: enteredEmail, password: enteredPsw);
+            //if the user doesnt exist 
             if(loggedIn.user == null){
               throw "Invalid Email or Password";
             }
@@ -93,10 +94,10 @@ class _FormsState extends State<Forms> {
             ], begin: Alignment.topLeft, end: Alignment.bottomRight)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
-              child: Text("Hello\nSign Up",
+              child: Text( isLogin ? "Welcome back \nMissed you" : "Hello\nSign Up",
                   textAlign: TextAlign.left,
-                  textScaleFactor: 2.9,
-                  style: GoogleFonts.zillaSlab(
+                  textScaleFactor: 2.3,
+                  style: GoogleFonts.amethysta(
                       color: Colors.white,
                       textStyle: const TextStyle(
                           fontWeight: FontWeight.w400, letterSpacing: 2))),
@@ -119,15 +120,8 @@ class _FormsState extends State<Forms> {
                 padding: EdgeInsets.all(30),
                 child: Column(
                   children: [
-                    const Center(
-                      child: CircleAvatar(
-                        maxRadius: 45,
-                        foregroundColor: Colors.green,
-                        backgroundColor: Colors.black12,
-                        foregroundImage: NetworkImage(
-                            "https://louisville.edu/enrollmentmanagement/images/person-icon/image"),
-                        //foregroundImage: ,
-                      ),
+                     Center(
+                      child:Icon(Icons.person_outline_outlined,size: 84, color: Colors.green.shade200,)
                     ),
                     const SizedBox(
                       height: 30,

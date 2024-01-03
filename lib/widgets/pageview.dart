@@ -14,18 +14,18 @@ class PageViews extends StatefulWidget {
 }
 
 class _PageViewsState extends State<PageViews> {
+   final PageController controller = PageController();
+    bool isLastpage = false;
   @override
   Widget build(BuildContext context) {
-    final PageController controller = PageController();
-    bool isLastpage = false;
     return Stack(
       children: [
         PageView(
             controller: controller,
             onPageChanged: (index) {
               setState(() {
-                isLastpage = index ==
-                    2; //here we are setting the condition for lastPage to be true
+                isLastpage = (index ==
+                    2); //here we are setting the condition for lastPage to be true
               });
             },
             children: const [

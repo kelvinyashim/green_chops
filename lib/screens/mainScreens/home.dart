@@ -23,14 +23,12 @@ class _HomeState extends State<Home> {
       ChatScreen()
     ];
     return Scaffold(
-      drawer: MainDrawer(),
-      appBar: AppBar(),
       bottomNavigationBar: CurvedNavigationBar(
         animationDuration: Duration(milliseconds: 600),
         index: 1,
         key: barKey,
         color: Colors.white,
-        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.4),
         items: <Widget>[
           Icon(Icons.star, size: 30),
           Icon(Icons.home, size: 30),
