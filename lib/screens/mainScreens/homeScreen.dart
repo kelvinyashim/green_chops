@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:green_chops/model/category.dart';
+import 'package:green_chops/model/dummy.data/data.dart';
+import 'package:green_chops/widgets/catScreen.dart';
 import 'package:green_chops/widgets/drawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -11,7 +14,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late AnimationController _controller;
+  late AnimationController _controller1;
   late Animation<Offset> _offsetAnimation;
+  late Animation<Offset> _offsetGrid;
 
   @override
   void initState() {
@@ -22,6 +27,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       duration: const Duration(seconds: 1),
     );
 
+    _controller1 =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 600));
+
     _offsetAnimation = Tween<Offset>(
       begin: Offset(3, 0.0), // Start from the right side
       end: Offset.zero, // End at the original position
@@ -30,14 +38,25 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       curve: Curves.easeInOut,
     ));
 
+    _offsetGrid = Tween<Offset>(
+            begin: Offset(0, 1.0),
+            end: Offset(0, 0) // Move to the left and down a bit
+            )
+        .animate(
+            CurvedAnimation(parent: _controller, curve: Curves.easeIn));
+
     _controller.forward(); // Start the animation
+    _controller1.forward();
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _controller1.dispose();
     super.dispose();
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -63,26 +82,30 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             bottom: 0,
             left: 0,
             right: 0,
-            top: 20,
+            top: 50,
             child: Container(
-              padding: const EdgeInsets.all(8),
-              alignment: Alignment.topCenter,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30)),
-              ),
-              child: Text(
-                "You are what you eat, so don't be fast, cheap, easy, or fake.",
-                style: GoogleFonts.pacifico(
-                    decorationColor: Colors.white,
-                    letterSpacing: 2,
-                    fontSize: 20),
-              ),
-            ),
+                padding: const EdgeInsets.all(8),
+                alignment: Alignment.topCenter,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30)),
+                ),
+                child: GridView(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1.2,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20),
+                  children: [
+                    for (final cat in availableCategories)
+                      SlideTransition(
+                          position: _offsetGrid,
+                          child: CategoryGridItem(categorys: cat, onTap: () {}))
+                  ],
+                )),
           ),
-         
         ],
       ),
     );
