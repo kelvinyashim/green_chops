@@ -28,6 +28,7 @@ class _HomeState extends State<Home> {
         index: 1,
         key: barKey,
         color: Colors.white,
+        
         backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.4),
         items: <Widget>[
           Icon(Icons.star, size: 30),
