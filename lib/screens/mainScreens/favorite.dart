@@ -5,8 +5,14 @@ class Favorite extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(child: Text("Fav"),),
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text("data"),
+      ),
+      body: Container(
+        child: Center(child: Text("Fav"),),
+      ),
     );
   }
 }

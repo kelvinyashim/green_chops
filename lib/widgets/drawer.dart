@@ -79,14 +79,17 @@ class _MainDrawerState extends State<MainDrawer> {
             
             UserAccountsDrawerHeader(
               decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer),
+                  color: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.2)),
               accountName: Text(accountName),
               accountEmail: Text(accountEmail),
               currentAccountPicture: CircleAvatar(
                 foregroundImage:
                     selectedImg != null ? FileImage(selectedImg!) : null,
                 backgroundColor: Colors.grey,
-                child: IconButton(icon: Icon(Icons.camera), onPressed:changeImage, hoverColor: Colors.grey, highlightColor: Colors.grey,),
+                child: Container(
+                  alignment: Alignment.bottomRight,
+                  margin: EdgeInsets.only(left: 30, top: 40),
+                  child: IconButton(icon: Icon(Icons.camera), onPressed:changeImage, hoverColor: Colors.grey, highlightColor: Colors.grey,)),
               ),
             ),
             if(selectedImg == false)
